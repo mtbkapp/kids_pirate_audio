@@ -26,7 +26,7 @@ class ListView(View):
     def draw(self, draw):
         tile_idx = 0
 
-        for item_idx in range(self.offset, self.offset + self.display_items):
+        for item_idx in range(self.offset, min(len(self.items), self.offset + self.display_items)):
             text_color = WHITE 
             item = self.items[item_idx]
             if item_idx == self.selected:
@@ -50,26 +50,57 @@ class ListView(View):
         if self.selected > self.offset + self.display_items - 1:
             self.offset += 1
 
+    def get_selected(self):
+        return self.items[self.selected]
+
+nested_views = {
+        "root": ["bikes", "computers"],
+        "bikes": [
+            "Trek",
+            "GT",
+            "Scott CR1",
+            "Rocky Mountain Altitude",
+            "Torker",
+            "Surly Cross Check",
+            "Surly Wednesday",
+            "Surly Karate Monkey"
+            ],
+        "computers": [
+            "Packard Bell 50mhz",
+            "Packard Bell 75mhz",
+            "Compaq",
+            "White Macbook",
+            "Macbook Pro"
+            ]
+        }
 
 class State:
     def __init__(self):
         self.state = True
-        self.view = ListView(["Something that is super long that I'll have to deal with later","B","C","D","E","F","G","H","I","J","K","L","M","N"])
+        self.view_stack = []
+        v = ListView(nested_views['root'])
+        self.view_stack.append(v)
 
     def push_a(self):
-        self.view.move_up()
+        self.current_view().move_up()
 
     def push_b(self):
-        self.view.move_down()
+        self.current_view().move_down()
 
     def push_x(self):
-        print("push x")
+        if len(self.view_stack) > 1:
+            self.view_stack.pop()
 
     def push_y(self):
-        print("push y")
+        selected = self.current_view().get_selected()
+        if selected in nested_views:
+            self.view_stack.append(ListView(nested_views[selected]))
+
+    def current_view(self):
+        return self.view_stack[len(self.view_stack) - 1]
 
     def render(self):
-        return self.view.render() 
+        return self.current_view().render() 
 
 
 class Emulator:
