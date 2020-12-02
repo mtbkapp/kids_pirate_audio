@@ -56,8 +56,8 @@ class PlayerViewController(ViewController):
         self.song_idx = 0
         self.tile_height = 30
         self.state = 'playing'
-        self.buttons = ['prev', 'play', 'pause']
-        self.selected_btn = 1 
+        self.buttons = ['prev', 'play', 'next']
+        self.selected_btn = 1
         # something that will cause a rerender every half second or so for
         # updating the progress
         # scrolling text
@@ -66,6 +66,7 @@ class PlayerViewController(ViewController):
         s = self.current_song()
         track = "Track %d / %d" % (self.song_idx + 1, len(self.songs))
         progress = "%d:%d" % (2, 30)
+        media_controls = "wat"
 
         draw.text((2, 2), s['title'], font=FONT, fill=WHITE)
         draw.text((2, 2 + self.tile_height), s['album'], font=FONT, fill=WHITE)
@@ -73,19 +74,60 @@ class PlayerViewController(ViewController):
         draw.text((2, 2 + (self.tile_height * 3)), track, font=FONT, fill=WHITE)
         draw.text((2, 2 + (self.tile_height * 4)), progress, font=FONT, fill=WHITE)
 
-        self.draw_prev_btn(draw, self.current_btn() == 'prev')
-
-    def draw_prev_btn(self, draw, is_selected):
-        rp(draw, 100, 100, 50, 3, 0)
+        draw.rectangle([(0, 175),(WIDTH - 1, HEIGHT - 1)],fill=(255,255,0), outline=(255,0,0))
 
 
-    def rp(self, draw, cx, cy, radius, sides, rot):
+
+        #self.draw_prev_btn(draw)
+        #self.draw_next_btn(draw)
+        #self.draw_play_pause_btn(draw)
+
+    def draw_play_pause_btn(self, draw):
+        btn_color = WHITE
+        if self.current_btn() == 'play':
+            bt_color = BLACK
+            pad_y = 10
+            pad_x = 15
+            p1 = ()
+            p2 = ()
+            draw.ellipse([p1, p2], fill=WHITE)
+
+    def draw_prev_btn(self, draw):
+        self.triangle_btn(draw, 50, 175, 30, -1, self.current_btn() == 'prev')
+
+    def draw_next_btn(self, draw):
+        self.triangle_btn(draw, WIDTH - 50, 175, 30, 1, self.current_btn() == 'next')
+
+
+    def regular_polygon(self, draw, cx, cy, radius, sides, rot, color=WHITE):
         angle = 2 * math.pi / sides
         points = []
         for s in range(sides):
             a = rot + (angle * s) 
-            # find x and y and put into points 
-        draw.polygon
+            x = math.cos(a) * radius
+            y = math.sin(a) * radius
+            points.append((cx + x, cy + y))
+        draw.polygon(points, fill=color)
+
+    def triangle_btn(self, draw, x, y, side, direction, is_selected):
+        tri_color = WHITE 
+        p1 = (x, y)
+        p2 = (x, y + side)
+        p3 = (x + (math.sqrt(3) / 2 * side * direction), y + (side / 2))
+        if is_selected:
+            tri_color = BLACK 
+            pad_x = side / 2
+            pad_y = side / 3
+            if direction == -1:
+                ep1 = (p3[0] - (pad_x / 2), p1[1] - pad_y)
+                ep2 = (p2[0] + pad_x, p2[1] + pad_y) 
+                draw.ellipse([ep1, ep2], fill=WHITE)
+            else:
+                ep1 = (p1[0] - pad_x, p1[1] - pad_y)
+                ep2 = (p3[0] + (pad_x / 2), p2[1] + pad_y)
+                draw.ellipse([ep1, ep2], fill=WHITE)
+        draw.polygon([p1, p2, p3], fill=tri_color)
+
 
 
     def current_song(self):
