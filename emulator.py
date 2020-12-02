@@ -1,11 +1,10 @@
 from tkinter import Tk, Button, Label
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 import sys
+from app import App
 
 HEIGHT=240
 WIDTH=240
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
 
 class Emulator:
     def __init__(self, tk_root, app, render_timeout):
@@ -62,19 +61,6 @@ class Emulator:
         self.tk_root.mainloop()
 
 
-
-class TestApp:
-    def handle_input(self, label):
-        print("input %s" % label)
-
-    def render(self):
-        img = Image.new('RGB', (WIDTH, HEIGHT), color=BLACK)
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('DejaVuSansMono.ttf', 20)
-        draw.text((2,2), "Hello world!", font=font, fill=WHITE)
-        return img
-
-
 if __name__ == '__main__':
     print("Python", sys.version)
-    Emulator(Tk(), TestApp(), 500).start()
+    Emulator(Tk(), App(), 500).start()
