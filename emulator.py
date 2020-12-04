@@ -63,4 +63,4 @@ class Emulator:
 
 if __name__ == '__main__':
     print("Python", sys.version)
-    Emulator(Tk(), App(), 500).start()
+    Emulator(Tk(), App(), 1000).start()

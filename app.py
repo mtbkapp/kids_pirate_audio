@@ -13,19 +13,19 @@ IMG_VOL_DOWN = Image.open('./icons/arrow-down.png')
 IMG_VOL_DOWN_SELECTED = Image.open('./icons/arrow-down-circle.png')
 IMG_VOL = Image.open('./icons/volume-2.png')
 
+IMG_PLAY = Image.open('./icons/play.png')
+IMG_PLAY_SELECTED = Image.open('./icons/play-circle.png')
+IMG_PAUSE = Image.open('./icons/pause.png')
+IMG_PAUSE_SELECTED = Image.open('./icons/pause-circle.png')
+IMG_NEXT = Image.open('./icons/arrow-right.png')
+IMG_NEXT_SELECTED = Image.open('./icons/arrow-right-circle.png')
+IMG_PREV = Image.open('./icons/arrow-left.png')
+IMG_PREV_SELECTED = Image.open('./icons/arrow-left-circle.png')
 
 class Player:
     def __init__(self, app):
         self.app = app
         self.line_height = 30
-        self.play_img = Image.open('./icons/play.png')
-        self.play_selected_img = Image.open('./icons/play-circle.png')
-        self.pause_img = Image.open('./icons/pause.png')
-        self.pause_selected_img = Image.open('./icons/pause-circle.png')
-        self.next_img = Image.open('./icons/arrow-right.png')
-        self.next_selected_img = Image.open('./icons/arrow-right-circle.png')
-        self.prev_img = Image.open('./icons/arrow-left.png')
-        self.prev_selected_img = Image.open('./icons/arrow-left-circle.png')
         self.selected_btn_idx = 2
         self.buttons = ['volume_down', 'prev', 'play_pause', 'next', 'volume_up']
         self.playing = True
@@ -83,27 +83,28 @@ class Player:
         top = 150 
         draw.rectangle([(pad_side, top), (WIDTH - pad_side, top + h)], fill=WHITE)
 
-        # volume buttons
-        top = 170
-        base.paste(IMG_VOL_DOWN, (70, top))
+        h = HEIGHT - 10 - ICON_SIZE 
+        p0 = (2, h)
+        p1 = (52, h)
+        p2 = (102, h)
+        p3 = (152, h)
+        p4 = (202, h)
 
-        # control buttons
-        pad_bottom = 10
-        h = HEIGHT - ICON_SIZE - pad_bottom
-        sel_btn = self.current_btn()
-
-        prev_img = self.prev_selected_img if sel_btn == 'prev' else self.prev_img
-        base.paste(prev_img, (pad_side, h))
-
-        play_pause_img = None
+        self.render_btn(base, 'volume_down', IMG_VOL_UP, IMG_VOL_UP_SELECTED, p0)
+        self.render_btn(base, 'prev', IMG_PREV, IMG_PREV_SELECTED, p1)
         if self.playing:
-            play_pause_img = self.pause_selected_img if sel_btn == 'play_pause' else self.pause_img
+            self.render_btn(base, 'play_pause', IMG_PAUSE, IMG_PAUSE_SELECTED, p2)
         else:
-            play_pause_img = self.play_selected_img if sel_btn == 'play_pause' else self.play_img
-        base.paste(play_pause_img, (int((WIDTH / 2) - (ICON_SIZE / 2)), h))
+            self.render_btn(base, 'play_pause', IMG_PLAY, IMG_PLAY_SELECTED, p2)
+        self.render_btn(base, 'next', IMG_NEXT, IMG_NEXT_SELECTED, p3)
+        self.render_btn(base, 'volume_up', IMG_VOL_DOWN, IMG_VOL_DOWN_SELECTED, p4)
 
-        next_img = self.next_selected_img if sel_btn == 'next' else self.next_img
-        base.paste(next_img, (WIDTH - ICON_SIZE - pad_side, h))
+    def render_btn(self, base, name, img, img_selected, pos):
+        base.paste(img_selected if self.current_btn() == name else img, pos)
+
+
+        
+
 
 
 class BlankView:
