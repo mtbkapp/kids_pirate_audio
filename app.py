@@ -7,6 +7,12 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 ICON_SIZE = 36
 
+IMG_VOL_UP = Image.open('./icons/arrow-up.png')
+IMG_VOL_UP_SELECTED = Image.open('./icons/arrow-up-circle.png')
+IMG_VOL_DOWN = Image.open('./icons/arrow-down.png')
+IMG_VOL_DOWN_SELECTED = Image.open('./icons/arrow-down-circle.png')
+IMG_VOL = Image.open('./icons/volume-2.png')
+
 
 class Player:
     def __init__(self, app):
@@ -20,9 +26,10 @@ class Player:
         self.next_selected_img = Image.open('./icons/arrow-right-circle.png')
         self.prev_img = Image.open('./icons/arrow-left.png')
         self.prev_selected_img = Image.open('./icons/arrow-left-circle.png')
-        self.selected_btn_idx = 1
-        self.buttons = ['prev', 'play_pause', 'next']
+        self.selected_btn_idx = 2
+        self.buttons = ['volume_down', 'prev', 'play_pause', 'next', 'volume_up']
         self.playing = True
+        self.volume = 50
 
     def handle_input(self, label):
         if label == 'A':
@@ -73,8 +80,12 @@ class Player:
 
         # progress bar 
         h = 10
-        top = 165 
+        top = 150 
         draw.rectangle([(pad_side, top), (WIDTH - pad_side, top + h)], fill=WHITE)
+
+        # volume buttons
+        top = 170
+        base.paste(IMG_VOL_DOWN, (70, top))
 
         # control buttons
         pad_bottom = 10
