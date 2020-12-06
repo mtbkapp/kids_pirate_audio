@@ -191,8 +191,8 @@ class BlankView:
     def handle_input(self, label):
         if label == 'Y':
             self.app.push_view(PlayerUI(self.app, [
-                '/home/mtbkapp/Downloads/06_My_Oh_My.flac',
-                '/home/mtbkapp/Downloads/01_Familiarity.flac']))
+                '/home/pi/music/06_My_Oh_My.flac',
+                '/home/pi/music/01_Familiarity.flac']))
 
     def render(self, img):
         draw = ImageDraw.Draw(img)
@@ -202,8 +202,8 @@ class BlankView:
 class App:
     def __init__(self):
         self.views = [BlankView(self), PlayerUI(self, [
-                '/home/mtbkapp/Downloads/06_My_Oh_My.flac',
-                '/home/mtbkapp/Downloads/01_Familiarity.flac'])]
+                '/home/pi/music/06_My_Oh_My.flac',
+                '/home/pi/music/01_Familiarity.flac'])]
 
     def handle_input(self, label):
         self.curr_view().handle_input(label)
